@@ -202,5 +202,78 @@ document.querySelectorAll('.horizontal-slides').forEach((track) => {
   }, { passive: true });
 });
 
+function readEngagement(postId) {
+  try {
+    const saved = JSON.parse(localStorage.getItem(`campushubEngagement:${postId}`) || '{}');
+    return { liked: Boolean(saved.liked), comments: Array.isArray(saved.comments) ? saved.comments : [] };
+  } catch {
+    return { liked: false, comments: [] };
+  }
+}
+
+function saveEngagement(postId, state) {
+  try {
+    localStorage.setItem(`campushubEngagement:${postId}`, JSON.stringify(state));
+    return true;
+  } catch {
+    showMessage('This browser could not save the interaction on this device.');
+    return false;
+  }
+}
+
+function wireEngagement(card) {
+  const postId = card.dataset.postId;
+  const likeButton = card.querySelector('.like-button');
+  const count = card.querySelector('.like-count');
+  const commentForm = card.querySelector('.comment-form');
+  const commentInput = commentForm.querySelector('input');
+  const commentList = card.querySelector('.comment-list');
+  let state = readEngagement(postId);
+
+  function render() {
+    likeButton.setAttribute('aria-pressed', String(state.liked));
+    likeButton.classList.toggle('liked', state.liked);
+    likeButton.querySelector('[aria-hidden="true"]').textContent = state.liked ? '♥' : '♡';
+    count.textContent = String(state.liked ? 1 : 0);
+    commentList.replaceChildren();
+    state.comments.forEach((comment) => {
+      const row = document.createElement('p');
+      row.className = 'comment-entry';
+      const author = document.createElement('strong');
+      author.textContent = comment.author || 'You';
+      const text = document.createElement('span');
+      text.textContent = comment.text;
+      row.append(author, text);
+      commentList.append(row);
+    });
+  }
+
+  likeButton.addEventListener('click', () => {
+    const previousLike = state.liked;
+    state.liked = !state.liked;
+    if (saveEngagement(postId, state)) render();
+    else state.liked = previousLike;
+  });
+
+  commentForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const text = commentInput.value.trim();
+    if (!text) return;
+    let author = 'You';
+    try { author = localStorage.getItem('campushubProfileName') || 'You'; } catch { /* Optional profile name. */ }
+    state.comments.push({ author, text });
+    if (saveEngagement(postId, state)) {
+      commentInput.value = '';
+      render();
+    } else {
+      state.comments.pop();
+    }
+  });
+
+  render();
+}
+
+document.querySelectorAll('.engagement-card').forEach(wireEngagement);
+
 renderTodayClasses();
 renderSchedule('monday');
