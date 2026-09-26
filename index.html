@@ -20,50 +20,32 @@
   </header>
 
   <main id="home-screen" class="page-shell">
-    <section class="welcome" aria-labelledby="welcome-title">
-      <div>
-        <p class="eyebrow">MONDAY, 25 SEPTEMBER</p>
-        <h1 id="welcome-title">Good evening, James <span aria-hidden="true">👋</span></h1>
-        <p class="muted">Communication &amp; Media <span class="separator">·</span> Year 1</p>
-      </div>
-      <div class="avatar" aria-label="James's profile">J</div>
+    <section class="today-section" aria-labelledby="today-heading">
+      <div class="home-section-heading"><div><p class="eyebrow" id="today-date">TODAY</p><h1 id="today-heading">Today's Classes</h1></div><button class="text-button" type="button" data-screen="timetable">Full schedule <span aria-hidden="true">→</span></button></div>
+      <div id="home-today-classes" class="today-class-list" aria-live="polite"></div>
     </section>
 
-    <section class="announcement panel" aria-labelledby="announcement-title">
-      <div class="announcement-symbol" aria-hidden="true">!</div>
-      <div class="announcement-copy">
-        <p class="label urgent-label"><span class="pulse"></span> IMPORTANT UPDATE</p>
-        <h2 id="announcement-title">CCM 101 has been cancelled</h2>
-        <p>Today's class will not take place. Please check the timetable for your next class.</p>
-        <div class="announcement-meta"><span>Posted by Class Rep</span><span>8 min ago</span></div>
+    <section class="home-section" aria-labelledby="announcements-heading">
+      <div class="home-section-heading"><div><p class="eyebrow">FROM YOUR ADMIN &amp; APPROVED AGENTS</p><h2 id="announcements-heading">Latest Announcements</h2></div><span class="slide-hint">Swipe to browse <span aria-hidden="true">↔</span></span></div>
+      <div class="horizontal-slides" aria-label="Latest announcements" tabindex="0">
+        <article class="info-slide announcement-slide"><span class="slide-tag">ANNOUNCEMENTS</span><span class="preview-tag">PREVIEW</span><h3>Important class announcements will appear here</h3><p>Updates shared by the administrator or an approved agent will be easy to find on Home.</p></article>
+        <article class="info-slide announcement-slide"><span class="slide-tag">ANNOUNCEMENTS</span><span class="preview-tag">PREVIEW</span><h3>One place for the latest class information</h3><p>Swipe sideways to move through announcements and see the next update.</p></article>
       </div>
-      <span class="card-arrow" aria-hidden="true">↗</span>
+      <div class="slide-dots" aria-hidden="true"><span class="active"></span><span></span></div>
     </section>
 
-    <div class="content-grid">
-      <section aria-labelledby="today-heading">
-        <div class="section-heading"><div><p class="eyebrow">YOUR SCHEDULE</p><h2 id="today-heading">Today's classes</h2></div><button class="text-button" type="button" data-screen="timetable">View timetable <span aria-hidden="true">→</span></button></div>
-        <article class="class-card panel">
-          <div class="time-block"><strong>5:00</strong><span>PM</span></div>
-          <div class="class-details"><span class="class-tag">NEXT CLASS</span><h3>CCM 102</h3><p>Communication Theory</p><div class="location"><span aria-hidden="true">⌖</span> AZ 40</div></div>
-          <span class="card-arrow" aria-hidden="true">→</span>
-        </article>
-      </section>
+    <section class="home-section" aria-labelledby="updates-heading">
+      <div class="home-section-heading"><div><p class="eyebrow">STAY IN THE LOOP</p><h2 id="updates-heading">Updates</h2></div><span class="slide-hint">Swipe to browse <span aria-hidden="true">↔</span></span></div>
+      <div class="horizontal-slides update-slides" aria-label="Campus updates" tabindex="0">
+        <article class="info-slide update-slide"><span class="slide-tag">CAMPUS UPDATE</span><span class="preview-tag">PREVIEW</span><h3>Useful student updates will appear here</h3><p>Swipe sideways to browse important information shared with your class.</p></article>
+        <article class="info-slide update-slide"><span class="slide-tag">CAMPUS UPDATE</span><span class="preview-tag">PREVIEW</span><h3>Keep everything in one place</h3><p>Approved updates will be added here as they are shared.</p></article>
+      </div>
+      <div class="slide-dots update-dots" aria-hidden="true"><span class="active"></span><span></span></div>
+    </section>
 
-      <section aria-labelledby="quick-heading">
-        <div class="section-heading"><div><p class="eyebrow">GET THERE FASTER</p><h2 id="quick-heading">Quick access</h2></div></div>
-        <div class="quick-grid">
-          <button class="quick-card" type="button" data-screen="timetable"><span class="quick-icon lilac" aria-hidden="true">▦</span><span><strong>Timetable</strong><small>Your weekly classes</small></span><b aria-hidden="true">↗</b></button>
-          <button class="quick-card" type="button" data-message="The Announcements screen is coming soon."><span class="quick-icon peach" aria-hidden="true">◉</span><span><strong>Announcements</strong><small>Updates from your class</small></span><b aria-hidden="true">↗</b></button>
-          <button class="quick-card" type="button" data-message="The Resources screen is coming soon."><span class="quick-icon mint" aria-hidden="true">↗</span><span><strong>Resources</strong><small>Links and course files</small></span><b aria-hidden="true">↗</b></button>
-          <button class="quick-card" type="button" data-message="The Events screen is coming soon."><span class="quick-icon butter" aria-hidden="true">✦</span><span><strong>Events</strong><small>What's happening on campus</small></span><b aria-hidden="true">↗</b></button>
-        </div>
-      </section>
-    </div>
-
-    <section class="events-section" aria-labelledby="events-heading">
-      <div class="section-heading"><div><p class="eyebrow">SAVE THE DATE</p><h2 id="events-heading">Upcoming events</h2></div><button class="text-button" type="button" data-message="The Events screen is coming soon.">See all <span aria-hidden="true">→</span></button></div>
-      <article class="event-card panel"><div class="event-date"><strong>28</strong><span>SEP</span></div><div class="event-info"><span class="event-type">CAMPUS LIFE</span><h3>Freshers' Welcome Mixer</h3><p><span aria-hidden="true">◷</span> Saturday, 4:00 PM <span class="separator">·</span> Student Centre</p></div><button class="save-event" type="button" aria-label="Save Freshers' Welcome Mixer" aria-pressed="false">♡</button></article>
+    <section class="home-section quick-links-section" aria-labelledby="quick-links-heading">
+      <div class="home-section-heading"><div><p class="eyebrow">ONLINE CLASS ACCESS</p><h2 id="quick-links-heading">Quick Links</h2></div></div>
+      <div class="quick-links-empty"><span class="quick-links-icon" aria-hidden="true">↗</span><div><strong>No class links shared yet</strong><p>Online class links will appear here when your administrator or an approved agent shares them.</p></div></div>
     </section>
   </main>
 
@@ -81,9 +63,9 @@
   </main>
 
   <nav class="bottom-nav" aria-label="Main navigation">
-    <button class="nav-item active" type="button" aria-current="page" data-message="You are already on Home."><span aria-hidden="true">⌂</span><small>Home</small></button>
+    <button class="nav-item active" type="button" aria-current="page" data-screen="home"><span aria-hidden="true">⌂</span><small>Home</small></button>
     <button class="nav-item" type="button" data-screen="timetable"><span aria-hidden="true">▦</span><small>Schedule</small></button>
-    <button class="nav-item" type="button" data-message="The Announcements screen is coming soon."><span aria-hidden="true">◉</span><small>Alerts</small></button>
+    <button class="nav-item" type="button" data-message="The Store screen is coming soon."><span aria-hidden="true">▣</span><small>Store</small></button>
     <button class="nav-item" type="button" data-message="The Profile screen is coming soon."><span aria-hidden="true">◎</span><small>Profile</small></button>
   </nav>
   <div class="toast" role="status" aria-live="polite"></div>

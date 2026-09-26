@@ -89,4 +89,35 @@ document.querySelectorAll('[data-day]').forEach((button) => {
   button.addEventListener('click', () => renderSchedule(button.dataset.day));
 });
 
+function renderTodayClasses() {
+  const timezone = 'Africa/Nairobi';
+  const today = new Intl.DateTimeFormat('en', { weekday: 'long', timeZone: timezone }).format(new Date()).toLowerCase();
+  const todayDate = new Intl.DateTimeFormat('en', { weekday: 'long', day: 'numeric', month: 'long', timeZone: timezone }).format(new Date());
+  const classes = weeklyClasses[today] || [];
+  document.querySelector('#today-date').textContent = todayDate.toUpperCase();
+
+  const list = document.querySelector('#home-today-classes');
+  if (!classes.length) {
+    list.innerHTML = '<div class="today-empty"><span aria-hidden="true">✦</span><div><strong>No classes listed for today</strong><p>Your weekly timetable currently has classes from Monday to Friday.</p></div></div>';
+    return;
+  }
+
+  list.innerHTML = classes.map((item) => `
+    <article class="home-class-card">
+      <div class="home-class-time">${item.start}</div>
+      <div class="home-class-unit"><strong>${item.unit}</strong></div>
+      <span class="home-class-venue ${item.venue === '(e)' ? 'online' : ''}">${item.venue}</span>
+    </article>`).join('');
+}
+
+document.querySelectorAll('.horizontal-slides').forEach((track) => {
+  const dots = track.nextElementSibling?.querySelectorAll('span');
+  if (!dots?.length) return;
+  track.addEventListener('scroll', () => {
+    const activeIndex = track.scrollLeft > 12 ? 1 : 0;
+    dots.forEach((dot, index) => dot.classList.toggle('active', index === activeIndex));
+  }, { passive: true });
+});
+
+renderTodayClasses();
 renderSchedule('monday');
