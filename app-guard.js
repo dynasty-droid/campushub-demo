@@ -8,10 +8,10 @@
     return;
   }
 
-  window.campushub.auth.getSession().then(async ({ data, error }) => {
+  window.campushubAppReady = window.campushub.auth.getSession().then(async ({ data, error }) => {
     if (error || !data.session) {
       window.location.replace('auth.html');
-      return;
+      return false;
     }
 
     const user = data.session.user;
@@ -19,18 +19,18 @@
       .from('staff_access').select('role').eq('user_id', user.id).maybeSingle();
     if (staffError) {
       window.location.replace('auth.html?setup=connection');
-      return;
+      return false;
     }
-    if (staff && ['owner', 'administrator'].includes(staff.role)) {
+    if (staff && ['owner', 'administrator', 'agent'].includes(staff.role)) {
       window.location.replace('admin.html');
-      return;
+      return false;
     }
 
     let { data: profile, error: profileError } = await window.campushub
       .from('student_profiles').select('*').eq('user_id', user.id).maybeSingle();
     if (profileError) {
       window.location.replace('auth.html?setup=connection');
-      return;
+      return false;
     }
 
     if (!profile) {
@@ -40,7 +40,7 @@
       if (!username || !admissionNumber) {
         await window.campushub.auth.signOut();
         window.location.replace('auth.html?setup=profile');
-        return;
+        return false;
       }
       const result = await window.campushub.from('student_profiles').upsert({
         user_id: user.id,
@@ -50,7 +50,7 @@
       if (result.error) {
         await window.campushub.auth.signOut();
         window.location.replace('auth.html?setup=profile');
-        return;
+        return false;
       }
       profile = result.data;
     }
@@ -69,5 +69,6 @@
       await window.campushub.auth.signOut();
       window.location.replace('auth.html');
     });
+    return true;
   });
 })();

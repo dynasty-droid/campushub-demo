@@ -231,10 +231,11 @@ function renderTodayClasses() {
 }
 
 document.querySelectorAll('.horizontal-slides').forEach((track) => {
-  const dots = track.nextElementSibling?.querySelectorAll('span');
-  if (!dots?.length) return;
   track.addEventListener('scroll', () => {
-    const activeIndex = track.scrollLeft > 12 ? 1 : 0;
+    const dots = track.nextElementSibling?.querySelectorAll('span');
+    if (!dots?.length) return;
+    const maxScroll = track.scrollWidth - track.clientWidth;
+    const activeIndex = maxScroll > 0 ? Math.round(track.scrollLeft / maxScroll * (dots.length - 1)) : 0;
     dots.forEach((dot, index) => dot.classList.toggle('active', index === activeIndex));
   }, { passive: true });
 });
@@ -387,6 +388,7 @@ function wireEngagement(card) {
 }
 
 document.querySelectorAll('.engagement-card').forEach(wireEngagement);
+window.wireCampusHubEngagement = wireEngagement;
 
 renderTodayClasses();
 renderSchedule('monday');
