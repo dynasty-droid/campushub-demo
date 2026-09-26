@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#10213f">
   <title>CampusHub | Student Portal</title>
-  <link rel="stylesheet" href="style.css?v=20260926-comment-edit2">
-  <script src="script.js?v=20260926-comment-edit2" defer></script>
+  <link rel="stylesheet" href="style.css?v=20260926-store1">
+  <link rel="stylesheet" href="store.css?v=20260926-store1">
+  <script src="script.js?v=20260926-store1" defer></script>
 </head>
 <body>
   <header class="topbar">
@@ -14,7 +15,7 @@
       <span class="brand-mark" aria-hidden="true">C</span>
       <span><strong>CampusHub</strong><small>Your campus, connected.</small></span>
     </a>
-    <div class="topbar-actions"><button class="desktop-profile-link" type="button" data-screen="profile">My Profile</button><button class="notification-button" type="button" aria-label="Notifications">
+    <div class="topbar-actions"><button class="desktop-profile-link" type="button" data-screen="store">Store</button><button class="desktop-profile-link" type="button" data-screen="profile">My Profile</button><button class="notification-button" type="button" aria-label="Notifications">
       <span aria-hidden="true">♧</span><i class="notification-dot"></i>
     </button></div>
   </header>
@@ -96,10 +97,35 @@
     </section>
   </main>
 
+  <main id="store-screen" class="store-view" hidden>
+    <section class="store-subview" data-store-view="menu">
+      <div class="store-heading"><p class="eyebrow">STUDENT RESOURCES</p><h1>Store</h1><p>Browse unit documents and lecture notes for your semester.</p></div>
+      <div class="store-feature-grid">
+        <button class="store-feature-card" type="button" data-store-open="unit-document"><span class="store-feature-icon document-icon" aria-hidden="true">▤</span><span class="store-feature-label">SEMESTER RESOURCE</span><h2>Unit document</h2><p>See the units you are studying in Semester 1.1.</p><span class="store-feature-arrow" aria-hidden="true">→</span></button>
+        <button class="store-feature-card" type="button" data-store-open="lecture-units"><span class="store-feature-icon notes-icon" aria-hidden="true">▧</span><span class="store-feature-label">STUDY MATERIALS</span><h2>Lecture notes</h2><p>Choose a unit to view its lecture notes when they are shared.</p><span class="store-feature-arrow" aria-hidden="true">→</span></button>
+      </div>
+    </section>
+
+    <section class="store-subview" data-store-view="unit-document" hidden>
+      <div class="store-heading"><button class="back-home" type="button" data-store-back="menu"><span aria-hidden="true">←</span> Back to Store</button><p class="eyebrow">KENYATTA UNIVERSITY · 2026–2027</p><h1>Unit document</h1><p>Communication and Media Studies · Semester 1.1</p></div>
+      <div class="unit-document-card"><div class="unit-document-title"><div><p class="eyebrow">SEMESTER 1.1</p><h2>Units of study</h2></div><span class="unit-count">7 units</span></div><ol class="unit-document-list"><li><span>01</span><strong>UCU 110</strong></li><li><span>02</span><strong>UCU 111</strong></li><li><span>03</span><strong>CCM 100</strong></li><li><span>04</span><strong>CCM 101</strong></li><li><span>05</span><strong>CCM 102</strong></li><li><span>06</span><strong>CCM 104</strong></li><li><span>07</span><strong>CCM 105</strong></li></ol></div>
+    </section>
+
+    <section class="store-subview" data-store-view="lecture-units" hidden>
+      <div class="store-heading"><button class="back-home" type="button" data-store-back="menu"><span aria-hidden="true">←</span> Back to Store</button><p class="eyebrow">STUDY MATERIALS</p><h1>Lecture notes</h1><p>Choose a unit to see its notes when the administrator shares them.</p></div>
+      <div class="lecture-unit-grid"><button type="button" class="lecture-unit-button" data-lecture-unit="UCU 110"><span>UCU 110</span><span aria-hidden="true">→</span></button><button type="button" class="lecture-unit-button" data-lecture-unit="UCU 111"><span>UCU 111</span><span aria-hidden="true">→</span></button><button type="button" class="lecture-unit-button" data-lecture-unit="CCM 100"><span>CCM 100</span><span aria-hidden="true">→</span></button><button type="button" class="lecture-unit-button" data-lecture-unit="CCM 101"><span>CCM 101</span><span aria-hidden="true">→</span></button><button type="button" class="lecture-unit-button" data-lecture-unit="CCM 102"><span>CCM 102</span><span aria-hidden="true">→</span></button><button type="button" class="lecture-unit-button" data-lecture-unit="CCM 104"><span>CCM 104</span><span aria-hidden="true">→</span></button><button type="button" class="lecture-unit-button" data-lecture-unit="CCM 105"><span>CCM 105</span><span aria-hidden="true">→</span></button></div>
+    </section>
+
+    <section class="store-subview" data-store-view="lecture-note" hidden>
+      <div class="store-heading"><button class="back-home" type="button" data-store-back="lecture-units"><span aria-hidden="true">←</span> Back to Lecture notes</button><p class="eyebrow">LECTURE NOTES</p><h1 id="selected-lecture-unit">Unit notes</h1><p>Notes for this unit will appear here when shared by the administrator.</p></div>
+      <div class="notes-coming-soon"><span aria-hidden="true">▧</span><div><strong>Notes will be added later</strong><p>Check back when your administrator has shared the lecture notes for this unit.</p></div></div>
+    </section>
+  </main>
+
   <nav class="bottom-nav" aria-label="Main navigation">
     <button class="nav-item active" type="button" aria-current="page" data-screen="home"><span aria-hidden="true">⌂</span><small>Home</small></button>
     <button class="nav-item" type="button" data-screen="timetable"><span aria-hidden="true">▦</span><small>Schedule</small></button>
-    <button class="nav-item" type="button" data-message="The Store screen is coming soon."><span aria-hidden="true">▣</span><small>Store</small></button>
+    <button class="nav-item" type="button" data-screen="store"><span aria-hidden="true">▣</span><small>Store</small></button>
     <button class="nav-item" type="button" data-screen="profile"><span aria-hidden="true">◎</span><small>Profile</small></button>
   </nav>
   <div class="toast" role="status" aria-live="polite"></div>

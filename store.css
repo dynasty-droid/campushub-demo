@@ -1,0 +1,30 @@
+/* CampusHub Store screens */
+#store-screen[hidden]{display:none!important}
+.store-view{max-width:1000px;margin:38px auto 90px;padding:0 24px}
+.store-heading{position:relative;padding-top:32px;margin-bottom:22px}
+.store-heading h1{margin:0;color:#17233a;font:700 clamp(24px,3vw,31px) 'Segoe UI',Arial,sans-serif;letter-spacing:-1px}
+.store-heading>p:last-child{margin:7px 0 0;color:var(--muted);font-size:13px}
+.store-feature-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.store-feature-card{position:relative;min-height:205px;padding:21px;text-align:left;border:1px solid var(--line);border-radius:17px;background:#fff;box-shadow:0 5px 20px #263d6008;color:inherit;cursor:pointer;transition:transform .16s,box-shadow .16s,border-color .16s}
+.store-feature-card:hover{transform:translateY(-2px);border-color:#d5deeb;box-shadow:0 10px 25px #263d6012}
+.store-feature-icon{display:grid;place-items:center;width:42px;height:42px;margin-bottom:15px;border-radius:13px;font-size:20px}
+.document-icon{background:#eeeaff;color:#7161b5}.notes-icon{background:#e7f5ef;color:#45866f}
+.store-feature-label{display:block;color:#8d97a8;font-size:8px;font-weight:700;letter-spacing:.9px}
+.store-feature-card h2{margin:6px 0;color:#26334b;font-size:17px}
+.store-feature-card p{max-width:270px;margin:0;color:#7d889b;font-size:11px;line-height:1.55}
+.store-feature-arrow{position:absolute;right:20px;bottom:19px;color:#8290a6;font-size:17px}
+.unit-document-card{max-width:720px;padding:21px 23px 10px;border:1px solid var(--line);border-radius:17px;background:#fff;box-shadow:0 5px 20px #263d6008}
+.unit-document-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.unit-document-title .eyebrow{margin-bottom:4px}.unit-document-title h2{margin:0;color:#1c2940;font-size:17px}
+.unit-count{padding:6px 10px;border-radius:20px;background:#f1f4f9;color:#63728e;font-size:10px}
+.unit-document-list{list-style:none;margin:0;padding:0}
+.unit-document-list li{display:flex;align-items:center;gap:14px;padding:14px 4px;border-top:1px solid #edf0f5}
+.unit-document-list li span{color:#9aa3b1;font-size:9px;font-weight:700}.unit-document-list li strong{color:#2c3a52;font-size:12px;letter-spacing:.3px}
+.lecture-unit-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;max-width:720px}
+.lecture-unit-button{display:flex;align-items:center;justify-content:space-between;min-height:65px;padding:15px 17px;border:1px solid var(--line);border-radius:13px;background:#fff;color:#2c3a52;font:700 12px 'Segoe UI',Arial,sans-serif;cursor:pointer;transition:.15s}
+.lecture-unit-button:hover{border-color:#c9d4e5;background:#fbfcfe}.lecture-unit-button span:last-child{color:#8391a8;font-size:16px}
+.notes-coming-soon{display:flex;align-items:center;gap:13px;max-width:720px;padding:18px;border:1px solid var(--line);border-radius:15px;background:#fff}
+.notes-coming-soon>span{display:grid;place-items:center;flex:0 0 39px;height:39px;border-radius:12px;background:#e7f5ef;color:#45866f;font-size:19px}
+.notes-coming-soon strong{display:block;color:#27354b;font-size:12px}.notes-coming-soon p{margin:5px 0 0;color:#828da0;font-size:10px;line-height:1.45}
+@media(max-width:700px){.store-view{margin:27px auto 95px;padding:0 18px}.store-heading{padding-top:28px;margin-bottom:18px}.store-heading h1{font-size:24px}.store-heading>p:last-child{font-size:11px}.store-feature-grid{grid-template-columns:1fr;gap:11px}.store-feature-card{min-height:170px;padding:17px;border-radius:15px}.store-feature-icon{width:37px;height:37px;margin-bottom:12px}.store-feature-card h2{font-size:15px}.store-feature-card p{font-size:10px}.unit-document-card{padding:16px 14px 6px;border-radius:15px}.unit-document-title h2{font-size:16px}.unit-document-list li{padding:12px 3px}.lecture-unit-grid{gap:8px}.lecture-unit-button{min-height:58px;padding:12px 13px;border-radius:11px;font-size:11px}.notes-coming-soon{padding:14px}}
+@media(max-width:370px){.store-view{padding:0 14px}.lecture-unit-grid{gap:6px}.lecture-unit-button{padding:11px;font-size:10px}}

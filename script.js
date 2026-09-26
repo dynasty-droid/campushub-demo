@@ -61,8 +61,27 @@ function renderSchedule(day) {
     </article>`).join('');
 }
 
+function showStoreView(view, unit = '') {
+  document.querySelectorAll('[data-store-view]').forEach((section) => {
+    section.hidden = section.dataset.storeView !== view;
+  });
+  if (unit) document.querySelector('#selected-lecture-unit').textContent = unit;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+document.querySelectorAll('[data-store-open]').forEach((button) => {
+  button.addEventListener('click', () => showStoreView(button.dataset.storeOpen));
+});
+document.querySelectorAll('[data-store-back]').forEach((button) => {
+  button.addEventListener('click', () => showStoreView(button.dataset.storeBack));
+});
+document.querySelectorAll('[data-lecture-unit]').forEach((button) => {
+  button.addEventListener('click', () => showStoreView('lecture-note', button.dataset.lectureUnit));
+});
+
 function showScreen(screen) {
-  const screens = { home: '#home-screen', timetable: '#timetable-screen', profile: '#profile-screen' };
+  const screens = { home: '#home-screen', timetable: '#timetable-screen', profile: '#profile-screen', store: '#store-screen' };
+  if (screen === 'store') showStoreView('menu');
   Object.entries(screens).forEach(([name, selector]) => {
     document.querySelector(selector).hidden = name !== screen;
   });
