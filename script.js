@@ -161,7 +161,7 @@ profilePhotoInput.addEventListener('change', () => {
   reader.readAsDataURL(file);
 });
 
-profileForm.addEventListener('submit', (event) => {
+profileForm.addEventListener('submit', async (event) => {
   event.preventDefault();
   const name = profileNameInput.value.trim();
   const admissionNumber = profileAdmissionInput.value.trim().toUpperCase();
@@ -174,11 +174,28 @@ profileForm.addEventListener('submit', (event) => {
   }
   profileAdmissionInput.setCustomValidity('');
   profileAdmissionInput.value = admissionNumber;
+  if (window.campushub && window.campushubUser) {
+    document.querySelector('#profile-save-status').textContent = 'Saving your profile…';
+    const { error } = await window.campushub.from('student_profiles').update({
+      username: name,
+      admission_number: admissionNumber,
+      updated_at: new Date().toISOString()
+    }).eq('user_id', window.campushubUser.id);
+    if (error) {
+      document.querySelector('#profile-save-status').textContent = error.code === '23505'
+        ? 'That admission number is already in use. Please check it or contact the administrator.'
+        : 'We could not save your profile. Check your connection and try again.';
+      return;
+    }
+    window.campushubProfile = { ...window.campushubProfile, username: name, admission_number: admissionNumber };
+  }
   updateProfileSummary(name, admissionNumber);
   try {
     localStorage.setItem('campushubProfileName', name);
     localStorage.setItem('campushubAdmissionNumber', admissionNumber);
-    document.querySelector('#profile-save-status').textContent = 'Saved on this device.';
+    document.querySelector('#profile-save-status').textContent = window.campushub && window.campushubUser
+      ? 'Saved securely to your CampusHub account.'
+      : 'Saved on this device.';
   } catch {
     document.querySelector('#profile-save-status').textContent = 'Your details are shown for this visit, but this browser could not save them.';
   }

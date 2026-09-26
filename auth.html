@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10213f">
+  <title>Sign in | CampusHub</title>
+  <link rel="stylesheet" href="auth.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="supabase-config.js" defer></script>
+  <script src="auth-client.js" defer></script>
+  <script src="auth-page.js" defer></script>
+</head>
+<body>
+  <main class="auth-layout">
+    <section class="auth-brand-panel" aria-label="CampusHub welcome">
+      <a class="brand" href="index.html" aria-label="CampusHub home">
+        <span class="brand-mark" aria-hidden="true">C</span>
+        <span><strong>CampusHub</strong><small>Your campus, connected.</small></span>
+      </a>
+      <div class="brand-message">
+        <p class="eyebrow">KENYATTA UNIVERSITY</p>
+        <h1>Your class,<br>all in one place.</h1>
+        <p>Sign in to see your schedule, class announcements, updates and study resources.</p>
+      </div>
+      <div class="brand-footer">Communication and Media Studies · 2026–2027</div>
+    </section>
+
+    <section class="auth-main">
+      <div class="auth-card">
+        <p class="eyebrow" id="form-eyebrow">WELCOME BACK</p>
+        <h2 id="form-title">Sign in to CampusHub</h2>
+        <p class="auth-intro" id="form-intro">Use the email address and password for your CampusHub account.</p>
+
+        <div id="setup-message" class="setup-message" role="status" hidden>
+          <strong>One quick setup step remains</strong>
+          <p>CampusHub still needs the project's publishable key. In <code>supabase-config.js</code>, paste the <strong>publishable</strong> key from Supabase. Never paste a secret or service-role key here.</p>
+        </div>
+
+        <div class="auth-switch" role="tablist" aria-label="Account action">
+          <button type="button" class="auth-tab active" id="signin-tab" role="tab" aria-selected="true">Sign in</button>
+          <button type="button" class="auth-tab" id="signup-tab" role="tab" aria-selected="false">Create student account</button>
+        </div>
+
+        <form id="signin-form" class="auth-form">
+          <label>Email address<input name="email" type="email" autocomplete="email" required></label>
+          <label>Password<input name="password" type="password" autocomplete="current-password" minlength="8" required></label>
+          <button class="primary-button" type="submit">Sign in <span aria-hidden="true">→</span></button>
+        </form>
+
+        <form id="signup-form" class="auth-form" hidden>
+          <label>Your name / username<input name="username" type="text" maxlength="40" autocomplete="nickname" required></label>
+          <label>Admission number<input name="admissionNumber" type="text" maxlength="40" autocomplete="off" autocapitalize="characters" pattern="F109.+" title="Your admission number must begin with F109." placeholder="F109…" required></label>
+          <label>Email address<input name="email" type="email" autocomplete="email" required></label>
+          <label>Password<input name="password" type="password" autocomplete="new-password" minlength="8" required><small>Use at least 8 characters.</small></label>
+          <button class="primary-button" type="submit">Create account <span aria-hidden="true">→</span></button>
+          <p class="privacy-note">Your admission number is checked for duplicates. Each student can only access their own profile.</p>
+        </form>
+
+        <p id="auth-status" class="auth-status" role="status" aria-live="polite"></p>
+        <button id="resend-confirmation" class="text-button" type="button" hidden>Resend confirmation email</button>
+        <p class="auth-help">Need help getting access? Contact your CampusHub administrator.</p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
