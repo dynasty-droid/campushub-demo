@@ -1,12 +1,14 @@
 (() => {
   const signInForm = document.querySelector('#signin-form');
   const signUpForm = document.querySelector('#signup-form');
+  const inviteSetupForm = document.querySelector('#invite-setup-form');
   const signInTab = document.querySelector('#signin-tab');
   const signUpTab = document.querySelector('#signup-tab');
   const status = document.querySelector('#auth-status');
   const setupMessage = document.querySelector('#setup-message');
   const resendButton = document.querySelector('#resend-confirmation');
   const setupReason = new URLSearchParams(window.location.search).get('setup');
+  const inviteMode = new URLSearchParams(window.location.search).get('invite') === '1';
 
   function setStatus(message, isError = false) {
     status.textContent = message;
@@ -17,6 +19,8 @@
     const isSignIn = mode === 'signin';
     signInForm.hidden = !isSignIn;
     signUpForm.hidden = isSignIn;
+    inviteSetupForm.hidden = true;
+    document.querySelector('.auth-switch').hidden = false;
     signInTab.classList.toggle('active', isSignIn);
     signUpTab.classList.toggle('active', !isSignIn);
     signInTab.setAttribute('aria-selected', String(isSignIn));
@@ -45,7 +49,7 @@
       .from('staff_access').select('role').eq('user_id', user.id).maybeSingle();
     if (staffError) throw staffError;
 
-    if (staff && ['owner', 'administrator'].includes(staff.role)) {
+    if (staff && ['owner', 'administrator', 'agent'].includes(staff.role)) {
       window.location.replace('admin.html');
       return;
     }
@@ -146,6 +150,51 @@
     }
   }
 
+  async function showInviteSetup(user) {
+    const { data: staff, error } = await window.campushub.from('staff_access')
+      .select('role').eq('user_id', user.id).maybeSingle();
+    if (error) throw error;
+    if (!staff || !['agent', 'administrator', 'owner'].includes(staff.role)) {
+      await window.campushub.auth.signOut();
+      throw new Error('This invitation does not have active CampusHub staff access. Contact the main administrator.');
+    }
+    signInForm.hidden = true;
+    signUpForm.hidden = true;
+    inviteSetupForm.hidden = false;
+    document.querySelector('.auth-switch').hidden = true;
+    document.querySelector('#form-eyebrow').textContent = 'STAFF INVITATION';
+    document.querySelector('#form-title').textContent = 'Finish your staff setup';
+    document.querySelector('#form-intro').textContent = 'Create a password, then sign in to your approved CampusHub tools.';
+    setStatus('');
+  }
+
+  async function handleInviteSetup(event) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const values = new FormData(form);
+    const password = String(values.get('newPassword'));
+    const confirmPassword = String(values.get('confirmPassword'));
+    if (password.length < 8) {
+      setStatus('Choose a password with at least 8 characters.', true);
+      return;
+    }
+    if (password !== confirmPassword) {
+      setStatus('Those passwords do not match. Please check them and try again.', true);
+      return;
+    }
+    setBusy(form, true);
+    setStatus('Finishing your staff account…');
+    try {
+      const { data, error } = await window.campushub.auth.updateUser({ password });
+      if (error) throw error;
+      await continueIntoCampusHub(data.user);
+    } catch (error) {
+      setStatus(error.message || 'We could not finish account setup. Try the invitation link again.', true);
+    } finally {
+      setBusy(form, false);
+    }
+  }
+
   async function resendConfirmation() {
     const emailInput = signUpForm.hidden ? signInForm.elements.email : signUpForm.elements.email;
     const email = resendButton.dataset.email || emailInput.value.trim();
@@ -167,6 +216,7 @@
   signUpTab.addEventListener('click', () => switchMode('signup'));
   signInForm.addEventListener('submit', handleSignIn);
   signUpForm.addEventListener('submit', handleSignUp);
+  inviteSetupForm.addEventListener('submit', handleInviteSetup);
   resendButton.addEventListener('click', resendConfirmation);
   for (const emailInput of [signInForm.elements.email, signUpForm.elements.email]) {
     emailInput.addEventListener('input', () => {
@@ -189,6 +239,11 @@
   }
 
   window.campushub.auth.getSession().then(({ data, error }) => {
-    if (!error && data.session) continueIntoCampusHub(data.session.user).catch((err) => setStatus(err.message, true));
+    if (!error && data.session) {
+      if (inviteMode) showInviteSetup(data.session.user).catch((err) => setStatus(err.message, true));
+      else continueIntoCampusHub(data.session.user).catch((err) => setStatus(err.message, true));
+    } else if (inviteMode) {
+      setStatus('Open the invitation link from your Gmail inbox to continue. If it has expired, contact the main administrator.', true);
+    }
   });
 })();

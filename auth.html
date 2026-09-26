@@ -9,7 +9,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
   <script src="supabase-config.js" defer></script>
   <script src="auth-client.js" defer></script>
-  <script src="auth-page.js" defer></script>
+  <script src="auth-page.js?v=20260927-gmail1" defer></script>
 </head>
 <body>
   <main class="auth-layout">
@@ -55,6 +55,13 @@
           <label>Password<input name="password" type="password" autocomplete="new-password" minlength="8" required><small>Use at least 8 characters.</small></label>
           <button class="primary-button" type="submit">Create account <span aria-hidden="true">→</span></button>
           <p class="privacy-note">Your admission number is checked for duplicates. Each student can only access their own profile.</p>
+        </form>
+
+        <form id="invite-setup-form" class="auth-form" hidden>
+          <p class="privacy-note">You’ve been invited to help manage CampusHub. Choose a password to finish setting up your staff account.</p>
+          <label>Create a password<input name="newPassword" type="password" autocomplete="new-password" minlength="8" required><small>Use at least 8 characters.</small></label>
+          <label>Confirm password<input name="confirmPassword" type="password" autocomplete="new-password" minlength="8" required></label>
+          <button class="primary-button" type="submit">Finish setup <span aria-hidden="true">→</span></button>
         </form>
 
         <p id="auth-status" class="auth-status" role="status" aria-live="polite"></p>
