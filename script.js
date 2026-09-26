@@ -61,11 +61,12 @@ function renderSchedule(day) {
     </article>`).join('');
 }
 
-function showStoreView(view, unit = '') {
+function showStoreView(view, unit = '', title = '') {
   document.querySelectorAll('[data-store-view]').forEach((section) => {
     section.hidden = section.dataset.storeView !== view;
   });
   if (unit) document.querySelector('#selected-lecture-unit').textContent = unit;
+  document.querySelector('#selected-lecture-title').textContent = title;
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -76,7 +77,7 @@ document.querySelectorAll('[data-store-back]').forEach((button) => {
   button.addEventListener('click', () => showStoreView(button.dataset.storeBack));
 });
 document.querySelectorAll('[data-lecture-unit]').forEach((button) => {
-  button.addEventListener('click', () => showStoreView('lecture-note', button.dataset.lectureUnit));
+  button.addEventListener('click', () => showStoreView('lecture-note', button.dataset.lectureUnit, button.dataset.lectureTitle));
 });
 
 function showScreen(screen) {
