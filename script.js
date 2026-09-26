@@ -66,7 +66,7 @@ function showScreen(screen) {
   Object.entries(screens).forEach(([name, selector]) => {
     document.querySelector(selector).hidden = name !== screen;
   });
-  document.querySelectorAll('.bottom-nav [data-screen]').forEach((button) => {
+  document.querySelectorAll('[data-screen]').forEach((button) => {
     button.classList.toggle('active', button.dataset.screen === screen);
     if (button.dataset.screen === screen) button.setAttribute('aria-current', 'page');
     else button.removeAttribute('aria-current');
