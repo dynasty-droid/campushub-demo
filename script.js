@@ -62,9 +62,10 @@ function renderSchedule(day) {
 }
 
 function showScreen(screen) {
-  const isTimetable = screen === 'timetable';
-  document.querySelector('#home-screen').hidden = isTimetable;
-  document.querySelector('#timetable-screen').hidden = !isTimetable;
+  const screens = { home: '#home-screen', timetable: '#timetable-screen', profile: '#profile-screen' };
+  Object.entries(screens).forEach(([name, selector]) => {
+    document.querySelector(selector).hidden = name !== screen;
+  });
   document.querySelectorAll('.bottom-nav [data-screen]').forEach((button) => {
     button.classList.toggle('active', button.dataset.screen === screen);
     if (button.dataset.screen === screen) button.setAttribute('aria-current', 'page');
@@ -72,6 +73,41 @@ function showScreen(screen) {
   });
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+
+const profileForm = document.querySelector('#profile-form');
+const profileNameInput = document.querySelector('#profile-name-input');
+const profileAdmissionInput = document.querySelector('#profile-admission-input');
+
+function updateProfileSummary(name, admissionNumber) {
+  document.querySelector('#profile-display-name').textContent = name || 'Choose your name';
+  document.querySelector('#profile-display-admission').textContent = admissionNumber || 'Not added';
+  document.querySelector('#profile-avatar').textContent = name ? name.trim().charAt(0).toUpperCase() : '?';
+}
+
+try {
+  const savedName = localStorage.getItem('campushubProfileName') || '';
+  const savedAdmission = localStorage.getItem('campushubAdmissionNumber') || '';
+  profileNameInput.value = savedName;
+  profileAdmissionInput.value = savedAdmission;
+  updateProfileSummary(savedName, savedAdmission);
+} catch {
+  // Keep the profile usable if browser storage is disabled.
+}
+
+profileForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const name = profileNameInput.value.trim();
+  const admissionNumber = profileAdmissionInput.value.trim();
+  if (!name || !admissionNumber) return;
+  updateProfileSummary(name, admissionNumber);
+  try {
+    localStorage.setItem('campushubProfileName', name);
+    localStorage.setItem('campushubAdmissionNumber', admissionNumber);
+    document.querySelector('#profile-save-status').textContent = 'Saved on this device.';
+  } catch {
+    document.querySelector('#profile-save-status').textContent = 'Your details are shown for this visit, but this browser could not save them.';
+  }
+});
 
 document.querySelectorAll('[data-screen]').forEach((button) => {
   button.addEventListener('click', () => showScreen(button.dataset.screen));

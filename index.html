@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#10213f">
-  <title>CampusHub | Home</title>
-  <link rel="stylesheet" href="style.css?v=20260926-home2">
-  <script src="script.js?v=20260926-home2" defer></script>
+  <title>CampusHub | Student Portal</title>
+  <link rel="stylesheet" href="style.css?v=20260926-profile1">
+  <script src="script.js?v=20260926-profile1" defer></script>
 </head>
 <body>
   <header class="topbar">
@@ -62,11 +62,44 @@
     <p class="schedule-footnote"><span aria-hidden="true">✦</span> Timetable details shown as provided by your class.</p>
   </main>
 
+  <main id="profile-screen" class="profile-view" hidden>
+    <div class="profile-heading"><button class="back-home" type="button" data-screen="home"><span aria-hidden="true">←</span> Back to Home</button><p class="eyebrow">YOUR STUDENT ACCOUNT</p><h1>My Profile</h1><p class="profile-subtitle">Your student details in one place.</p></div>
+
+    <section class="profile-card">
+      <div class="profile-avatar" id="profile-avatar" aria-hidden="true">?</div>
+      <div class="profile-card-copy"><p class="eyebrow">STUDENT PROFILE</p><h2 id="profile-display-name">Choose your name</h2><p>Admission number: <strong id="profile-display-admission">Not added</strong></p></div>
+      <span class="profile-status"><i></i> STUDENT</span>
+    </section>
+
+    <section class="profile-section" aria-labelledby="student-details-title">
+      <div class="profile-section-heading"><div><p class="eyebrow">EDITABLE BY YOU</p><h2 id="student-details-title">Student details</h2></div></div>
+      <form id="profile-form" class="profile-form">
+        <div class="profile-form-grid">
+          <label for="profile-name-input">Student name / username<input id="profile-name-input" name="displayName" type="text" maxlength="40" autocomplete="nickname" placeholder="Choose the name students will see" required></label>
+          <label for="profile-admission-input">Admission number<input id="profile-admission-input" name="admissionNumber" type="text" maxlength="40" autocomplete="off" placeholder="Enter your admission number" required></label>
+        </div>
+        <p class="field-hint">Your admission number is intended to identify you uniquely. Duplicate checks across students will be added when account registration is connected.</p>
+        <div class="profile-form-footer"><p id="profile-save-status" role="status" aria-live="polite">This preview saves details in this browser only.</p><button class="save-profile-button" type="submit">Save profile <span aria-hidden="true">→</span></button></div>
+      </form>
+    </section>
+
+    <section class="profile-section locked-section" aria-labelledby="university-details-title">
+      <div class="profile-section-heading"><div><p class="eyebrow">MANAGED BY ADMINISTRATOR</p><h2 id="university-details-title">University details</h2></div><span class="locked-badge"><span aria-hidden="true">▣</span> LOCKED</span></div>
+      <div class="institution-grid">
+        <div class="institution-field"><span>University</span><strong>Kenyatta University</strong></div>
+        <div class="institution-field"><span>Course</span><strong>Communication and Media Studies</strong></div>
+        <div class="institution-field"><span>Academic year</span><strong>2026–2027</strong></div>
+        <div class="institution-field"><span>Semester</span><strong>Semester 1.1</strong></div>
+      </div>
+      <p class="field-hint">These details stay fixed for students and can be changed by the administrator when the academic information changes.</p>
+    </section>
+  </main>
+
   <nav class="bottom-nav" aria-label="Main navigation">
     <button class="nav-item active" type="button" aria-current="page" data-screen="home"><span aria-hidden="true">⌂</span><small>Home</small></button>
     <button class="nav-item" type="button" data-screen="timetable"><span aria-hidden="true">▦</span><small>Schedule</small></button>
     <button class="nav-item" type="button" data-message="The Store screen is coming soon."><span aria-hidden="true">▣</span><small>Store</small></button>
-    <button class="nav-item" type="button" data-message="The Profile screen is coming soon."><span aria-hidden="true">◎</span><small>Profile</small></button>
+    <button class="nav-item" type="button" data-screen="profile"><span aria-hidden="true">◎</span><small>Profile</small></button>
   </nav>
   <div class="toast" role="status" aria-live="polite"></div>
 </body>
