@@ -16,14 +16,6 @@ document.querySelector('.notification-button').addEventListener('click', () => {
   showMessage('You are all caught up on notifications.');
 });
 
-document.querySelector('.save-event').addEventListener('click', (event) => {
-  const button = event.currentTarget;
-  const saved = button.getAttribute('aria-pressed') === 'true';
-  button.setAttribute('aria-pressed', String(!saved));
-  button.textContent = saved ? '♡' : '♥';
-  showMessage(saved ? 'Event removed from saved events.' : 'Event saved.');
-});
-
 const weeklyClasses = {
   monday: [
     { start: '4:00–5:00 PM', unit: 'UCU 111', venue: 'AZ39' },
