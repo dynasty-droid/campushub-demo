@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10213f">
+  <title>CampusHub | Home</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#home" aria-label="CampusHub home">
+      <span class="brand-mark" aria-hidden="true">C</span>
+      <span><strong>CampusHub</strong><small>Your campus, connected.</small></span>
+    </a>
+    <button class="notification-button" type="button" aria-label="Notifications">
+      <span aria-hidden="true">♧</span><i class="notification-dot"></i>
+    </button>
+  </header>
+
+  <main id="home-screen" class="page-shell">
+    <section class="welcome" aria-labelledby="welcome-title">
+      <div>
+        <p class="eyebrow">MONDAY, 25 SEPTEMBER</p>
+        <h1 id="welcome-title">Good evening, James <span aria-hidden="true">👋</span></h1>
+        <p class="muted">Communication &amp; Media <span class="separator">·</span> Year 1</p>
+      </div>
+      <div class="avatar" aria-label="James's profile">J</div>
+    </section>
+
+    <section class="announcement panel" aria-labelledby="announcement-title">
+      <div class="announcement-symbol" aria-hidden="true">!</div>
+      <div class="announcement-copy">
+        <p class="label urgent-label"><span class="pulse"></span> IMPORTANT UPDATE</p>
+        <h2 id="announcement-title">CCM 101 has been cancelled</h2>
+        <p>Today's class will not take place. Please check the timetable for your next class.</p>
+        <div class="announcement-meta"><span>Posted by Class Rep</span><span>8 min ago</span></div>
+      </div>
+      <span class="card-arrow" aria-hidden="true">↗</span>
+    </section>
+
+    <div class="content-grid">
+      <section aria-labelledby="today-heading">
+        <div class="section-heading"><div><p class="eyebrow">YOUR SCHEDULE</p><h2 id="today-heading">Today's classes</h2></div><button class="text-button" type="button" data-screen="timetable">View timetable <span aria-hidden="true">→</span></button></div>
+        <article class="class-card panel">
+          <div class="time-block"><strong>5:00</strong><span>PM</span></div>
+          <div class="class-details"><span class="class-tag">NEXT CLASS</span><h3>CCM 102</h3><p>Communication Theory</p><div class="location"><span aria-hidden="true">⌖</span> AZ 40</div></div>
+          <span class="card-arrow" aria-hidden="true">→</span>
+        </article>
+      </section>
+
+      <section aria-labelledby="quick-heading">
+        <div class="section-heading"><div><p class="eyebrow">GET THERE FASTER</p><h2 id="quick-heading">Quick access</h2></div></div>
+        <div class="quick-grid">
+          <button class="quick-card" type="button" data-screen="timetable"><span class="quick-icon lilac" aria-hidden="true">▦</span><span><strong>Timetable</strong><small>Your weekly classes</small></span><b aria-hidden="true">↗</b></button>
+          <button class="quick-card" type="button" data-message="The Announcements screen is coming soon."><span class="quick-icon peach" aria-hidden="true">◉</span><span><strong>Announcements</strong><small>Updates from your class</small></span><b aria-hidden="true">↗</b></button>
+          <button class="quick-card" type="button" data-message="The Resources screen is coming soon."><span class="quick-icon mint" aria-hidden="true">↗</span><span><strong>Resources</strong><small>Links and course files</small></span><b aria-hidden="true">↗</b></button>
+          <button class="quick-card" type="button" data-message="The Events screen is coming soon."><span class="quick-icon butter" aria-hidden="true">✦</span><span><strong>Events</strong><small>What's happening on campus</small></span><b aria-hidden="true">↗</b></button>
+        </div>
+      </section>
+    </div>
+
+    <section class="events-section" aria-labelledby="events-heading">
+      <div class="section-heading"><div><p class="eyebrow">SAVE THE DATE</p><h2 id="events-heading">Upcoming events</h2></div><button class="text-button" type="button" data-message="The Events screen is coming soon.">See all <span aria-hidden="true">→</span></button></div>
+      <article class="event-card panel"><div class="event-date"><strong>28</strong><span>SEP</span></div><div class="event-info"><span class="event-type">CAMPUS LIFE</span><h3>Freshers' Welcome Mixer</h3><p><span aria-hidden="true">◷</span> Saturday, 4:00 PM <span class="separator">·</span> Student Centre</p></div><button class="save-event" type="button" aria-label="Save Freshers' Welcome Mixer" aria-pressed="false">♡</button></article>
+    </section>
+  </main>
+
+  <main id="timetable-screen" class="schedule-view" hidden>
+    <div class="schedule-view-heading"><button class="back-home" type="button" data-screen="home"><span aria-hidden="true">←</span> Back to Home</button><p class="eyebrow">MEDIA &amp; COMMUNICATION · YEAR 1</p><h1>Your timetable</h1><p class="muted">Your classes for the week, all in one place.</p></div>
+    <nav class="week-tabs" aria-label="Choose a day">
+      <button class="week-tab active" type="button" data-day="monday"><small>MON</small><strong>Monday</strong><span>2 classes</span></button>
+      <button class="week-tab" type="button" data-day="tuesday"><small>TUE</small><strong>Tuesday</strong><span>2 classes</span></button>
+      <button class="week-tab" type="button" data-day="wednesday"><small>WED</small><strong>Wednesday</strong><span>3 classes</span></button>
+      <button class="week-tab" type="button" data-day="thursday"><small>THU</small><strong>Thursday</strong><span>3 classes</span></button>
+      <button class="week-tab" type="button" data-day="friday"><small>FRI</small><strong>Friday</strong><span>3 classes</span></button>
+    </nav>
+    <section class="schedule-view-card" aria-live="polite"><div class="schedule-view-title"><div><p class="eyebrow" id="schedule-day-label">MONDAY</p><h2 id="schedule-day-title">Monday classes</h2></div><span class="schedule-count" id="schedule-count">2 classes</span></div><div id="schedule-classes"></div></section>
+    <p class="schedule-footnote"><span aria-hidden="true">✦</span> Timetable details shown as provided by your class.</p>
+  </main>
+
+  <nav class="bottom-nav" aria-label="Main navigation">
+    <button class="nav-item active" type="button" aria-current="page" data-message="You are already on Home."><span aria-hidden="true">⌂</span><small>Home</small></button>
+    <button class="nav-item" type="button" data-screen="timetable"><span aria-hidden="true">▦</span><small>Schedule</small></button>
+    <button class="nav-item" type="button" data-message="The Announcements screen is coming soon."><span aria-hidden="true">◉</span><small>Alerts</small></button>
+    <button class="nav-item" type="button" data-message="The Profile screen is coming soon."><span aria-hidden="true">◎</span><small>Profile</small></button>
+  </nav>
+  <div class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

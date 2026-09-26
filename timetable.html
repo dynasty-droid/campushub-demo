@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10213f">
+  <title>CampusHub | Timetable</title>
+  <link rel="stylesheet" href="timetable.css">
+  <script src="timetable.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="CampusHub home"><span class="brand-mark">C</span><span><strong>CampusHub</strong><small>Your campus, connected.</small></span></a>
+    <a class="home-link" href="index.html"><span aria-hidden="true">←</span> Home</a>
+  </header>
+
+  <main class="page-shell">
+    <section class="page-heading">
+      <div><p class="eyebrow">MEDIA &amp; COMMUNICATION · YEAR 1</p><h1>Your timetable</h1><p class="subtitle">Your classes for the week, all in one place.</p></div>
+      <div class="week-label"><span class="calendar-icon" aria-hidden="true">▦</span><span><small>WEEKLY VIEW</small><strong>Monday – Friday</strong></span></div>
+    </section>
+
+    <nav class="day-tabs" aria-label="Choose a day">
+      <button class="day-tab active" type="button" data-day="monday"><small>MON</small><strong>Monday</strong><span>2 classes</span></button>
+      <button class="day-tab" type="button" data-day="tuesday"><small>TUE</small><strong>Tuesday</strong><span>2 classes</span></button>
+      <button class="day-tab" type="button" data-day="wednesday"><small>WED</small><strong>Wednesday</strong><span>3 classes</span></button>
+      <button class="day-tab" type="button" data-day="thursday"><small>THU</small><strong>Thursday</strong><span>3 classes</span></button>
+      <button class="day-tab" type="button" data-day="friday"><small>FRI</small><strong>Friday</strong><span>3 classes</span></button>
+    </nav>
+
+    <section class="schedule-panel" aria-live="polite">
+      <div class="schedule-heading"><div><p class="eyebrow" id="selected-label">MONDAY</p><h2 id="selected-title">Monday classes</h2></div><span class="class-count" id="class-count">2 classes</span></div>
+      <div class="class-list" id="class-list"></div>
+    </section>
+    <p class="footer-note"><span aria-hidden="true">✦</span> Class details are shown as provided on your class timetable.</p>
+  </main>
+
+  <nav class="mobile-day-nav" aria-label="Choose a day">
+    <button class="mobile-day active" type="button" data-day="monday"><span>M</span><small>Mon</small></button>
+    <button class="mobile-day" type="button" data-day="tuesday"><span>T</span><small>Tue</small></button>
+    <button class="mobile-day" type="button" data-day="wednesday"><span>W</span><small>Wed</small></button>
+    <button class="mobile-day" type="button" data-day="thursday"><span>T</span><small>Thu</small></button>
+    <button class="mobile-day" type="button" data-day="friday"><span>F</span><small>Fri</small></button>
+  </nav>
+</body>
+</html>
