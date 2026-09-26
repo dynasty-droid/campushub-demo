@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#10213f">
   <title>CampusHub | Student Portal</title>
-  <link rel="stylesheet" href="style.css?v=20260926-profile2">
-  <script src="script.js?v=20260926-profile2" defer></script>
+  <link rel="stylesheet" href="style.css?v=20260926-profile3">
+  <script src="script.js?v=20260926-profile3" defer></script>
 </head>
 <body>
   <header class="topbar">
@@ -66,7 +66,7 @@
     <div class="profile-heading"><button class="back-home" type="button" data-screen="home"><span aria-hidden="true">←</span> Back to Home</button><p class="eyebrow">YOUR STUDENT ACCOUNT</p><h1>My Profile</h1><p class="profile-subtitle">Your student details in one place.</p></div>
 
     <section class="profile-card">
-      <div class="profile-avatar" id="profile-avatar" aria-hidden="true">?</div>
+      <div class="profile-avatar" id="profile-avatar" aria-hidden="true"><span id="profile-avatar-initial">?</span><img id="profile-photo-preview" alt="" hidden></div>
       <div class="profile-card-copy"><p class="eyebrow">STUDENT PROFILE</p><h2 id="profile-display-name">Choose your name</h2><p>Admission number: <strong id="profile-display-admission">Not added</strong></p></div>
       <span class="profile-status"><i></i> STUDENT</span>
     </section>
@@ -74,11 +74,12 @@
     <section class="profile-section" aria-labelledby="student-details-title">
       <div class="profile-section-heading"><div><p class="eyebrow">EDITABLE BY YOU</p><h2 id="student-details-title">Student details</h2></div></div>
       <form id="profile-form" class="profile-form">
+        <div class="profile-photo-picker"><div><strong>Profile photo</strong><p>Choose an image from the photo or file picker on your device.</p></div><label class="photo-picker-button" for="profile-photo-input">Choose photo <span aria-hidden="true">＋</span></label><input id="profile-photo-input" type="file" accept="image/*" aria-label="Choose a profile photo" hidden></div>
         <div class="profile-form-grid">
           <label for="profile-name-input">Student name / username<input id="profile-name-input" name="displayName" type="text" maxlength="40" autocomplete="nickname" placeholder="Choose the name students will see" required></label>
-          <label for="profile-admission-input">Admission number<input id="profile-admission-input" name="admissionNumber" type="text" maxlength="40" autocomplete="off" placeholder="Enter your admission number" required></label>
+          <label for="profile-admission-input">Admission number<input id="profile-admission-input" name="admissionNumber" type="text" maxlength="40" autocomplete="off" autocapitalize="characters" inputmode="text" pattern="F109.+" title="Admission numbers for Communication and Media Studies must start with F109, followed by the rest of your admission number." placeholder="F109…" required></label>
         </div>
-        <p class="field-hint">Your admission number is intended to identify you uniquely. Duplicate checks across students will be added when account registration is connected.</p>
+        <p class="field-hint">Communication and Media Studies admission numbers must start with F109. Keep the rest of your admission number as issued. Duplicate checks across students will be added when account registration is connected.</p>
         <div class="profile-form-footer"><p id="profile-save-status" role="status" aria-live="polite">This preview saves details in this browser only.</p><button class="save-profile-button" type="submit">Save profile <span aria-hidden="true">→</span></button></div>
       </form>
     </section>

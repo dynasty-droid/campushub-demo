@@ -77,28 +77,83 @@ function showScreen(screen) {
 const profileForm = document.querySelector('#profile-form');
 const profileNameInput = document.querySelector('#profile-name-input');
 const profileAdmissionInput = document.querySelector('#profile-admission-input');
+const profilePhotoInput = document.querySelector('#profile-photo-input');
+const profilePhotoPreview = document.querySelector('#profile-photo-preview');
+let profilePhotoData = '';
 
-function updateProfileSummary(name, admissionNumber) {
+function updateProfileSummary(name, admissionNumber, photo = profilePhotoData) {
   document.querySelector('#profile-display-name').textContent = name || 'Choose your name';
   document.querySelector('#profile-display-admission').textContent = admissionNumber || 'Not added';
-  document.querySelector('#profile-avatar').textContent = name ? name.trim().charAt(0).toUpperCase() : '?';
+  document.querySelector('#profile-avatar-initial').textContent = name ? name.trim().charAt(0).toUpperCase() : '?';
+  profilePhotoPreview.src = photo || '';
+  profilePhotoPreview.hidden = !photo;
+  document.querySelector('#profile-avatar-initial').hidden = Boolean(photo);
 }
 
 try {
   const savedName = localStorage.getItem('campushubProfileName') || '';
   const savedAdmission = localStorage.getItem('campushubAdmissionNumber') || '';
+  profilePhotoData = localStorage.getItem('campushubProfilePhoto') || '';
   profileNameInput.value = savedName;
   profileAdmissionInput.value = savedAdmission;
-  updateProfileSummary(savedName, savedAdmission);
+  updateProfileSummary(savedName, savedAdmission, profilePhotoData);
 } catch {
   // Keep the profile usable if browser storage is disabled.
 }
 
+profileAdmissionInput.addEventListener('input', () => {
+  const cursor = profileAdmissionInput.selectionStart;
+  profileAdmissionInput.value = profileAdmissionInput.value.toUpperCase();
+  if (cursor !== null) profileAdmissionInput.setSelectionRange(cursor, cursor);
+});
+
+profilePhotoInput.addEventListener('change', () => {
+  const file = profilePhotoInput.files?.[0];
+  if (!file) return;
+  if (!file.type.startsWith('image/')) {
+    document.querySelector('#profile-save-status').textContent = 'Please choose an image file.';
+    profilePhotoInput.value = '';
+    return;
+  }
+  document.querySelector('#profile-save-status').textContent = 'Preparing your photo…';
+  const reader = new FileReader();
+  reader.onload = () => {
+    const image = new Image();
+    image.onload = () => {
+      const scale = Math.min(1, 512 / Math.max(image.naturalWidth, image.naturalHeight));
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.max(1, Math.round(image.naturalWidth * scale));
+      canvas.height = Math.max(1, Math.round(image.naturalHeight * scale));
+      canvas.getContext('2d').drawImage(image, 0, 0, canvas.width, canvas.height);
+      profilePhotoData = canvas.toDataURL('image/jpeg', 0.78);
+      updateProfileSummary(profileNameInput.value.trim(), profileAdmissionInput.value.trim(), profilePhotoData);
+      try {
+        localStorage.setItem('campushubProfilePhoto', profilePhotoData);
+        document.querySelector('#profile-save-status').textContent = 'Photo saved on this device. Save your profile details below.';
+      } catch {
+        document.querySelector('#profile-save-status').textContent = 'Photo selected. Save your profile to keep it on this device.';
+      }
+    };
+    image.onerror = () => { document.querySelector('#profile-save-status').textContent = 'That image could not be opened. Please choose another.'; };
+    image.src = reader.result;
+  };
+  reader.onerror = () => { document.querySelector('#profile-save-status').textContent = 'Could not read that image. Please try another.'; };
+  reader.readAsDataURL(file);
+});
+
 profileForm.addEventListener('submit', (event) => {
   event.preventDefault();
   const name = profileNameInput.value.trim();
-  const admissionNumber = profileAdmissionInput.value.trim();
+  const admissionNumber = profileAdmissionInput.value.trim().toUpperCase();
   if (!name || !admissionNumber) return;
+  if (!/^F109.+/.test(admissionNumber)) {
+    profileAdmissionInput.setCustomValidity('Your admission number must start with F109. Keep the rest of it as issued.');
+    profileAdmissionInput.reportValidity();
+    document.querySelector('#profile-save-status').textContent = 'Please enter an admission number that starts with F109.';
+    return;
+  }
+  profileAdmissionInput.setCustomValidity('');
+  profileAdmissionInput.value = admissionNumber;
   updateProfileSummary(name, admissionNumber);
   try {
     localStorage.setItem('campushubProfileName', name);
