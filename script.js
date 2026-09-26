@@ -205,7 +205,15 @@ document.querySelectorAll('.horizontal-slides').forEach((track) => {
 function readEngagement(postId) {
   try {
     const saved = JSON.parse(localStorage.getItem(`campushubEngagement:${postId}`) || '{}');
-    return { liked: Boolean(saved.liked), comments: Array.isArray(saved.comments) ? saved.comments : [] };
+    const comments = Array.isArray(saved.comments) ? saved.comments : [];
+    return {
+      liked: Boolean(saved.liked),
+      comments: comments.map((comment, index) => ({
+        id: comment.id || `${postId}-${index}`,
+        author: typeof comment.author === 'string' ? comment.author : 'You',
+        text: typeof comment.text === 'string' ? comment.text : ''
+      })).filter((comment) => comment.text)
+    };
   } catch {
     return { liked: false, comments: [] };
   }
@@ -226,9 +234,26 @@ function wireEngagement(card) {
   const likeButton = card.querySelector('.like-button');
   const count = card.querySelector('.like-count');
   const commentForm = card.querySelector('.comment-form');
-  const commentInput = commentForm.querySelector('input');
+  const commentInput = commentForm.querySelector('textarea');
+  const draftPreview = commentForm.querySelector('.draft-preview-text');
   const commentList = card.querySelector('.comment-list');
   let state = readEngagement(postId);
+  let editingCommentId = null;
+
+  function updateDraftPreview() {
+    const draft = commentInput.value.trim();
+    draftPreview.textContent = draft || 'Your comment preview will appear here.';
+    draftPreview.classList.toggle('has-draft', Boolean(draft));
+  }
+
+  function makeButton(label, className, onClick) {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = className;
+    button.textContent = label;
+    button.addEventListener('click', onClick);
+    return button;
+  }
 
   function render() {
     likeButton.setAttribute('aria-pressed', String(state.liked));
@@ -237,13 +262,61 @@ function wireEngagement(card) {
     count.textContent = String(state.liked ? 1 : 0);
     commentList.replaceChildren();
     state.comments.forEach((comment) => {
-      const row = document.createElement('p');
+      const row = document.createElement('div');
       row.className = 'comment-entry';
       const author = document.createElement('strong');
       author.textContent = comment.author || 'You';
-      const text = document.createElement('span');
-      text.textContent = comment.text;
-      row.append(author, text);
+      row.append(author);
+
+      if (editingCommentId === comment.id) {
+        const editor = document.createElement('div');
+        editor.className = 'comment-edit-box';
+        const editInput = document.createElement('textarea');
+        editInput.maxLength = 280;
+        editInput.rows = 2;
+        editInput.setAttribute('aria-label', 'Edit your comment');
+        editInput.value = comment.text;
+        editor.append(editInput);
+        editor.append(makeButton('Save edit', 'comment-manage-button', () => {
+          const nextText = editInput.value.trim();
+          if (!nextText) {
+            editInput.focus();
+            return;
+          }
+          const previousText = comment.text;
+          comment.text = nextText;
+          if (saveEngagement(postId, state)) {
+            editingCommentId = null;
+            render();
+          } else {
+            comment.text = previousText;
+          }
+        }));
+        editor.append(makeButton('Cancel', 'comment-manage-button secondary', () => {
+          editingCommentId = null;
+          render();
+        }));
+        row.append(editor);
+      } else {
+        const text = document.createElement('span');
+        text.className = 'comment-text';
+        text.textContent = comment.text;
+        row.append(text);
+        const controls = document.createElement('div');
+        controls.className = 'comment-controls';
+        controls.append(makeButton('Edit', 'comment-manage-button', () => {
+          editingCommentId = comment.id;
+          render();
+          commentList.querySelector('.comment-edit-box textarea')?.focus();
+        }));
+        controls.append(makeButton('Delete', 'comment-manage-button delete-comment-button', () => {
+          const index = state.comments.findIndex((item) => item.id === comment.id);
+          const [removed] = state.comments.splice(index, 1);
+          if (saveEngagement(postId, state)) render();
+          else state.comments.splice(index, 0, removed);
+        }));
+        row.append(controls);
+      }
       commentList.append(row);
     });
   }
@@ -255,21 +328,24 @@ function wireEngagement(card) {
     else state.liked = previousLike;
   });
 
+  commentInput.addEventListener('input', updateDraftPreview);
   commentForm.addEventListener('submit', (event) => {
     event.preventDefault();
     const text = commentInput.value.trim();
     if (!text) return;
     let author = 'You';
     try { author = localStorage.getItem('campushubProfileName') || 'You'; } catch { /* Optional profile name. */ }
-    state.comments.push({ author, text });
+    state.comments.push({ id: `${Date.now()}-${Math.random().toString(36).slice(2)}`, author, text });
     if (saveEngagement(postId, state)) {
       commentInput.value = '';
+      updateDraftPreview();
       render();
     } else {
       state.comments.pop();
     }
   });
 
+  updateDraftPreview();
   render();
 }
 
