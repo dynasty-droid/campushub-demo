@@ -5,8 +5,6 @@
   const slideTemplate = announcementTrack?.querySelector('.announcement-slide');
   const quickSection = document.querySelector('.quick-links-section');
   const quickTemplate = quickSection?.querySelector('.quick-link-preview');
-  const notesSection = document.querySelector('.notes-section');
-  const notesTemplate = notesSection?.querySelector('.quick-link-preview');
   const quickDots = (track, count) => {
     const dots = track?.nextElementSibling;
     if (!dots) return;
@@ -34,7 +32,6 @@
     const announcements = posts.filter(post => post.kind === 'announcement');
     const updates = posts.filter(post => post.kind === 'update');
     const links = posts.filter(post => post.kind === 'quick_link');
-    const notes = posts.filter(post => post.kind === 'lecture_notes');
 
     if (announcements.length) {
       const cards = announcements.map(post => makeSlide(post, 'announcement-slide', 'ANNOUNCEMENT'));
@@ -92,52 +89,6 @@
       quickSection.append(card);
       window.wireCampusHubEngagement?.(card);
     });
-
-    notesSection.querySelectorAll('.quick-link-preview').forEach(card => card.remove());
-    if (!notes.length) {
-      const empty = document.createElement('article');
-      empty.className = 'quick-link-preview quick-links-empty';
-      const copy = document.createElement('div');
-      copy.className = 'quick-link-copy';
-      const title = document.createElement('h3');
-      title.textContent = 'No lecture notes shared yet';
-      const text = document.createElement('p');
-      text.textContent = 'When your administrator or an approved agent uploads a document, it will appear here.';
-      copy.append(title, text);
-      empty.append(copy);
-      notesSection.append(empty);
-      return;
-    }
-    notes.forEach(post => {
-      const card = notesTemplate.cloneNode(true);
-      card.dataset.postId = post.id;
-      card.querySelector('.preview-tag')?.remove();
-      const title = card.querySelector('h3');
-      const text = card.querySelector('p');
-      title.textContent = post.title;
-      text.textContent = post.body || 'A document has been shared for this unit.';
-      const fileName = (post.storage_path || '').split('/').pop() || 'document';
-      const anchor = document.createElement('a');
-      anchor.className = 'shared-class-link text-button';
-      anchor.href = '#';
-      anchor.textContent = `Download ${fileName} ↓`;
-      anchor.addEventListener('click', async (event) => {
-        event.preventDefault();
-        if (!post.storage_path) return;
-        const original = anchor.textContent;
-        anchor.textContent = 'Preparing download…';
-        const { data, error } = await supabase.storage.from('lecture-notes').createSignedUrl(post.storage_path, 300);
-        anchor.textContent = original;
-        if (error || !data?.signedUrl) {
-          window.alert('This file could not be opened right now. Try again in a moment.');
-          return;
-        }
-        window.open(data.signedUrl, '_blank', 'noopener,noreferrer');
-      });
-      text.after(anchor);
-      notesSection.append(card);
-      window.wireCampusHubEngagement?.(card);
-    });
   }
 
   function makeSlide(post, className, tag) {
@@ -155,9 +106,9 @@
 
   async function loadPosts() {
     const { data, error } = await supabase.from('campus_posts')
-      .select('id,kind,title,body,link_url,storage_path,published_at')
+      .select('id,kind,title,body,link_url,published_at')
       .lte('published_at', new Date().toISOString())
-      .in('kind', ['announcement', 'update', 'quick_link', 'lecture_notes'])
+      .in('kind', ['announcement', 'update', 'quick_link'])
       .order('published_at', { ascending: false }).limit(50);
     if (error) {
       console.error('CampusHub student posts could not be loaded:', error.message);
