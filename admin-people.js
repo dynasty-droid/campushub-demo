@@ -261,49 +261,51 @@
   }
 
   async function loadStudentDirectory() {
-    const list = document.querySelector('#student-directory-list');
+    const confirmedBody = document.querySelector('#confirmed-students-body');
+    const pendingBody = document.querySelector('#pending-students-body');
     const countEl = document.querySelector('#student-count');
     const noteEl = document.querySelector('#student-confirmed-note');
-    if (!list) return;
+    if (!confirmedBody || !pendingBody) return;
     const { data, error } = await supabase.rpc('admin_user_directory');
     if (error) {
-      list.replaceChildren();
-      const failure = document.createElement('div');
-      failure.className = 'empty'; failure.textContent = 'Could not load student accounts.';
-      list.append(failure);
+      const failureRow = '<tr><td colspan="3" class="empty">Could not load student accounts.</td></tr>';
+      confirmedBody.innerHTML = failureRow;
+      pendingBody.innerHTML = failureRow;
       return;
     }
     const students = (data || []).filter(person => person.role === 'student');
+    const confirmed = students.filter(person => person.confirmed);
+    const pending = students.filter(person => !person.confirmed);
     if (countEl) countEl.textContent = String(students.length);
-    if (noteEl) {
-      const confirmed = students.filter(person => person.confirmed).length;
-      noteEl.textContent = `${confirmed} confirmed · ${students.length - confirmed} pending`;
+    if (noteEl) noteEl.textContent = `${confirmed.length} confirmed · ${pending.length} pending`;
+    document.querySelector('#confirmed-count').textContent = String(confirmed.length);
+    document.querySelector('#pending-count').textContent = String(pending.length);
+
+    function row(person, dateField) {
+      const tr = document.createElement('tr');
+      const nameCell = document.createElement('td');
+      nameCell.textContent = person.username || 'Name not set up yet';
+      const emailCell = document.createElement('td');
+      emailCell.textContent = person.email || 'Unavailable';
+      const dateCell = document.createElement('td');
+      dateCell.textContent = dateField === 'last_sign_in_at' ? timeAgo(person.last_sign_in_at) : timeAgo(person.created_at);
+      tr.append(nameCell, emailCell, dateCell);
+      return tr;
     }
-    list.replaceChildren();
-    if (!students.length) {
-      const empty = document.createElement('div');
-      empty.className = 'empty'; empty.textContent = 'No students have signed up yet.';
-      list.append(empty);
-      return;
+
+    confirmedBody.replaceChildren();
+    if (!confirmed.length) {
+      confirmedBody.innerHTML = '<tr><td colspan="3" class="empty">No confirmed students yet.</td></tr>';
+    } else {
+      confirmed.forEach(person => confirmedBody.append(row(person, 'last_sign_in_at')));
     }
-    students.forEach(person => {
-      const record = document.createElement('article');
-      record.className = 'record staff-record';
-      const identity = document.createElement('div');
-      const name = document.createElement('strong');
-      name.textContent = person.username || 'Name not set up yet';
-      const email = document.createElement('small');
-      email.textContent = person.email || 'Email unavailable';
-      identity.append(name, email);
-      const summary = document.createElement('span');
-      summary.className = 'record-secondary';
-      summary.textContent = person.confirmed ? `Last active ${timeAgo(person.last_sign_in_at)}` : 'Waiting to confirm email';
-      const badge = document.createElement('span');
-      badge.className = person.confirmed ? 'role' : 'badge-live';
-      badge.textContent = person.confirmed ? 'CONFIRMED' : 'PENDING';
-      record.append(identity, summary, badge);
-      list.append(record);
-    });
+
+    pendingBody.replaceChildren();
+    if (!pending.length) {
+      pendingBody.innerHTML = '<tr><td colspan="3" class="empty">No one is waiting on confirmation. 🎉</td></tr>';
+    } else {
+      pending.forEach(person => pendingBody.append(row(person, 'created_at')));
+    }
   }
 
   async function start() {
