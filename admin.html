@@ -10,7 +10,7 @@
   <script src="auth-client.js" defer></script>
   <script src="admin-guard.js?v=20260926-posts1" defer></script>
   <script src="admin-posts.js?v=20260928-notes1" defer></script>
-  <script src="admin-people.js?v=20260927-gmail2" defer></script>
+  <script src="admin-people.js?v=20260929-stats1" defer></script>
   <style>
     html:not([data-campushub-ready]) body .layout{visibility:hidden}
     .admin-signout{margin-left:12px;padding:8px 10px;border:1px solid #e4e9f0;border-radius:9px;background:#fff;color:#52617a;font:600 10px inherit;cursor:pointer}
@@ -40,8 +40,9 @@
       <div class="content">
         <section class="page active" id="overview-page">
           <div class="welcome"><div><p class="eyebrow">ADMINISTRATOR WORKSPACE</p><h1>Good day, Administrator</h1></div><p>Share useful information with students and manage the people who help run CampusHub.</p></div>
-          <div class="stats"><article class="stat"><span class="stat-label">Published this week</span><strong id="published-count">0</strong><small><span>●</span> Shared with students</small></article><article class="stat"><span class="stat-label">Active agents</span><strong id="agent-count">—</strong><small>With access you assigned</small></article><article class="stat"><span class="stat-label">Pending review</span><strong>0</strong><small>Agent posts publish immediately</small></article></div>
+          <div class="stats"><article class="stat"><span class="stat-label">Published this week</span><strong id="published-count">0</strong><small><span>●</span> Shared with students</small></article><article class="stat"><span class="stat-label">Active agents</span><strong id="agent-count">—</strong><small>With access you assigned</small></article><article class="stat"><span class="stat-label">Registered students</span><strong id="student-count">—</strong><small id="student-confirmed-note">Checking…</small></article></div>
           <div class="dashboard-grid"><section class="panel"><div class="panel-head"><div><h2>Recent activity</h2><p>Latest posts and changes in your hub.</p></div><button class="subtle" data-goto="publish">New post</button></div><div id="activity-list" class="activity-list"><div class="empty">Your shared posts will appear here.</div></div></section><section class="panel"><div class="panel-head"><div><h2>Quick actions</h2><p>Common tasks for your class.</p></div></div><div class="quick-actions"><button data-goto="publish" data-kind="announcement">Create announcement <span>＋</span></button><button data-goto="publish" data-kind="update">Share an update <span>＋</span></button><button data-goto="publish" data-kind="quick_link">Share a WhatsApp link <span>＋</span></button><button data-goto="people">Manage agents <span>→</span></button></div><div class="notice">Agents you authorize can publish announcements, updates, and quick links immediately. You control who receives those permissions.</div></section></div>
+          <section class="panel" id="student-directory-panel"><div class="panel-head"><div><h2>Student accounts</h2><p>Who has signed up, and who is stuck waiting to confirm their email.</p></div></div><div id="student-directory-list" class="activity-list"><div class="empty">Loading student accounts…</div></div></section>
         </section>
         <section class="page" id="publish-page">
           <div class="welcome"><div><p class="eyebrow">STUDENT COMMUNICATION</p><h1>Create &amp; share</h1></div><p>Posts from an approved agent are shared with students as soon as they publish.</p></div>
