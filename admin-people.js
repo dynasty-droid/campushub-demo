@@ -249,6 +249,63 @@
     }
   }
 
+  function timeAgo(iso) {
+    if (!iso) return 'Never';
+    const diffMs = Date.now() - new Date(iso).getTime();
+    const mins = Math.round(diffMs / 60000);
+    if (mins < 60) return `${Math.max(mins, 0)}m ago`;
+    const hours = Math.round(mins / 60);
+    if (hours < 24) return `${hours}h ago`;
+    const days = Math.round(hours / 24);
+    return `${days}d ago`;
+  }
+
+  async function loadStudentDirectory() {
+    const list = document.querySelector('#student-directory-list');
+    const countEl = document.querySelector('#student-count');
+    const noteEl = document.querySelector('#student-confirmed-note');
+    if (!list) return;
+    const { data, error } = await supabase.rpc('admin_user_directory');
+    if (error) {
+      list.replaceChildren();
+      const failure = document.createElement('div');
+      failure.className = 'empty'; failure.textContent = 'Could not load student accounts.';
+      list.append(failure);
+      return;
+    }
+    const students = (data || []).filter(person => person.role === 'student');
+    if (countEl) countEl.textContent = String(students.length);
+    if (noteEl) {
+      const confirmed = students.filter(person => person.confirmed).length;
+      noteEl.textContent = `${confirmed} confirmed · ${students.length - confirmed} pending`;
+    }
+    list.replaceChildren();
+    if (!students.length) {
+      const empty = document.createElement('div');
+      empty.className = 'empty'; empty.textContent = 'No students have signed up yet.';
+      list.append(empty);
+      return;
+    }
+    students.forEach(person => {
+      const record = document.createElement('article');
+      record.className = 'record staff-record';
+      const identity = document.createElement('div');
+      const name = document.createElement('strong');
+      name.textContent = person.username || 'Name not set up yet';
+      const email = document.createElement('small');
+      email.textContent = person.email || 'Email unavailable';
+      identity.append(name, email);
+      const summary = document.createElement('span');
+      summary.className = 'record-secondary';
+      summary.textContent = person.confirmed ? `Last active ${timeAgo(person.last_sign_in_at)}` : 'Waiting to confirm email';
+      const badge = document.createElement('span');
+      badge.className = person.confirmed ? 'role' : 'badge-live';
+      badge.textContent = person.confirmed ? 'CONFIRMED' : 'PENDING';
+      record.append(identity, summary, badge);
+      list.append(record);
+    });
+  }
+
   async function start() {
     const ready = await window.campushubAdminReady;
     if (!ready || window.campushubStaff?.role !== 'owner') return;
@@ -257,6 +314,7 @@
     document.querySelector('#refresh-people').addEventListener('click', loadPeople);
     setInviteOptions();
     await loadPeople();
+    await loadStudentDirectory();
   }
 
   start();
